@@ -23,14 +23,14 @@ func SeedUp() error {
 	//Roles
 	_, err = db.Exec(`
 	INSERT INTO public."roles"
-	(id, "name", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(1, 'Admin', '2021-02-04 17:22:00.028991', 'admin', '2021-02-04 17:22:00.028991', 'admin', NULL, NULL);
+	(id, "name")
+	VALUES(1, 'Admin');
 	INSERT INTO public."roles"
-	(id, "name", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(2, 'Operator', '2021-02-04 17:22:21.016457', 'admin', '2021-02-04 17:22:21.016457', 'admin', NULL, NULL);
+	(id, "name")
+	VALUES(2, 'Operator');
 	INSERT INTO public."roles"
-	(id, "name", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(3, 'Guest', '2021-02-04 17:22:37.551864', 'admin', '2021-02-04 17:22:37.551864', 'admin', NULL, NULL);	
+	(id, "name")
+	VALUES(3, 'Guest');
 	`)
 	if err != nil {
 		return err
@@ -39,11 +39,40 @@ func SeedUp() error {
 	//User
 	_, err = db.Exec(`
 	INSERT INTO public.users
-	(id, "roleId", name, phone, "password", "token", "tokenExpiredAt", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(9999, 1, 'admin', '082101010101', 'jLov', NULL, NULL, '2021-02-07 14:37:52.252246', 'admin', '2021-02-07 14:37:52.252246', 'admin', NULL, NULL);
-	INSERT INTO public.users
-	(id, "roleId", name, phone, "password", "token", "tokenExpiredAt", "createdAt", "createdBy", "updatedAt", "updatedBy", "deletedAt", "deletedBy")
-	VALUES(9998, 2, 'efishery', '082102020202', 'VWqV', NULL, NULL, '2021-02-07 14:38:07.292022', 'admin', '2021-02-07 14:38:07.292022', 'admin', NULL, NULL);	
+	(id, "roleId", name, phone, "password", "token", "tokenExpiredAt")
+	VALUES(9999, 1, 'admin', '082101010101', 'jLov', NULL, NULL);
+	`)
+	if err != nil {
+		return err
+	}
+
+	//Character Type
+	_, err = db.Exec(`
+	INSERT INTO public."charactersType"
+	(id, name, code)
+	VALUES(1, 'Wizard', 1);
+	INSERT INTO public."charactersType"
+	(id, name, code)
+	VALUES(2, 'Elf', 2);
+	INSERT INTO public."charactersType"
+	(id, name, code)
+	VALUES(3, 'Hobbit', 3);
+	`)
+	if err != nil {
+		return err
+	}
+
+	//Character
+	_, err = db.Exec(`
+	INSERT INTO public.characters
+	(id, "characterTypeID", name, power)
+	VALUES(9999, 1, 'Gandalf', 100);
+	INSERT INTO public.characters
+	(id, "characterTypeID", name, power)
+	VALUES(9998, 2, 'Legolas', 60);
+	INSERT INTO public.characters
+	(id, "characterTypeID", name, power)
+	VALUES(9997, 3, 'Frodo', 10);	
 	`)
 	if err != nil {
 		return err

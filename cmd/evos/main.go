@@ -5,12 +5,13 @@ import (
 
 	"github.com/riskiramdan/evos/config"
 	"github.com/riskiramdan/evos/databases"
+	"github.com/riskiramdan/evos/internal/character"
+	characterPg "github.com/riskiramdan/evos/internal/character/postgres"
 	"github.com/riskiramdan/evos/internal/data"
 	"github.com/riskiramdan/evos/internal/hosts"
 	internalhttp "github.com/riskiramdan/evos/internal/http"
 	"github.com/riskiramdan/evos/internal/user"
 	userPg "github.com/riskiramdan/evos/internal/user/postgres"
-	"github.com/riskiramdan/evos/seeder"
 	"github.com/riskiramdan/evos/util"
 
 	"github.com/jmoiron/sqlx"
@@ -18,7 +19,8 @@ import (
 
 // InternalServices represents all the internal domain services
 type InternalServices struct {
-	userService user.ServiceInterface
+	userService      user.ServiceInterface
+	characterService character.ServiceInterface
 }
 
 func buildInternalServices(db *sqlx.DB) *InternalServices {
@@ -26,8 +28,14 @@ func buildInternalServices(db *sqlx.DB) *InternalServices {
 		data.NewPostgresStorage(db, "users", user.Users{}),
 	)
 	userService := user.NewService(userPostgresStorage)
+
+	characterPostgresStorage := characterPg.NewPostgresStorage(
+		data.NewPostgresStorage(db, "characters", character.Characters{}),
+	)
+	characterService := character.NewService(characterPostgresStorage)
 	return &InternalServices{
-		userService: userService,
+		userService:      userService,
+		characterService: characterService,
 	}
 }
 
@@ -50,13 +58,14 @@ func main() {
 	// Migrate the db
 	databases.MigrateUp()
 	// Seeder
-	err = seeder.SeedUp()
-	if err != nil {
-		log.Printf("Error: %v\n", err)
-	}
+	// err = seeder.SeedUp()
+	// if err != nil {
+	// 	log.Printf("Error: %v\n", err)
+	// }
 
 	s := internalhttp.NewServer(
 		internalServices.userService,
+		internalServices.characterService,
 		dataManager,
 		config,
 		util,

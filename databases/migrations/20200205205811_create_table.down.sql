@@ -1,2 +1,4 @@
-drop table if exists "user";
-drop table if exists "role";
+drop table if exists "users";
+drop table if exists "roles";
+drop table if exists "characters";
+drop table if exists "charactersType";

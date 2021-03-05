@@ -12,21 +12,21 @@ func init() {
 	// define files
 	file2 := &embedded.EmbeddedFile{
 		Filename:    "20200205205811_create_table.down.sql",
-		FileModTime: time.Unix(1612533536, 0),
+		FileModTime: time.Unix(1614962560, 0),
 
-		Content: string("drop table if exists \"user\";\ndrop table if exists \"role\";"),
+		Content: string("drop table if exists \"users\";\ndrop table if exists \"roles\";\ndrop table if exists \"characters\";\ndrop table if exists \"charactersType\";"),
 	}
 	file3 := &embedded.EmbeddedFile{
 		Filename:    "20200205205811_create_table.up.sql",
-		FileModTime: time.Unix(1612620891, 0),
+		FileModTime: time.Unix(1614962815, 0),
 
-		Content: string("-- Table Definition ----------------------------------------------\nCREATE TABLE \"users\" (\n  \"id\" SERIAL PRIMARY KEY NOT NULL,\n  \"roleId\" int NOT NULL,\n  \"name\" varchar(80) NOT NULL,\n  \"phone\" varchar(80) NOT NULL,\n  \"password\" varchar NOT NULL,\n  \"token\" varchar,\n  \"tokenExpiredAt\" timestamp,\n  \"createdAt\" timestamp NOT NULL DEFAULT (now()),\n  \"createdBy\" varchar(20) DEFAULT 'admin',\n  \"updatedAt\" timestamp NOT NULL DEFAULT (now()),\n  \"updatedBy\" varchar(20) DEFAULT 'admin',\n  \"deletedAt\" timestamp,\n  \"deletedBy\" varchar(20)\n);\n\nCREATE TABLE \"roles\" (\n  \"id\" SERIAL PRIMARY KEY NOT NULL,\n  \"name\" varchar(80) NOT NULL,\n  \"createdAt\" timestamp NOT NULL DEFAULT (now()),\n  \"createdBy\" varchar(20) DEFAULT 'admin',\n  \"updatedAt\" timestamp NOT NULL DEFAULT (now()),\n  \"updatedBy\" varchar(20) DEFAULT 'admin',\n  \"deletedAt\" timestamp,\n  \"deletedBy\" varchar(20)\n);\n\nALTER TABLE \"users\" ADD FOREIGN KEY (\"roleId\") REFERENCES \"roles\" (\"id\");\n"),
+		Content: string("-- Table Definition ----------------------------------------------\nCREATE TABLE \"users\" (\n  \"id\" SERIAL PRIMARY KEY NOT NULL,\n  \"roleId\" int NOT NULL,\n  \"name\" varchar(80) NOT NULL,\n  \"phone\" varchar(80) NOT NULL,\n  \"password\" varchar NOT NULL,\n  \"token\" varchar,\n  \"tokenExpiredAt\" timestamp,\n  \"createdAt\" timestamp NOT NULL DEFAULT (now()),\n  \"createdBy\" varchar(20) DEFAULT 'admin',\n  \"updatedAt\" timestamp NOT NULL DEFAULT (now()),\n  \"updatedBy\" varchar(20) DEFAULT 'admin',\n  \"deletedAt\" timestamp,\n  \"deletedBy\" varchar(20)\n);\n\nCREATE TABLE \"roles\" (\n  \"id\" SERIAL PRIMARY KEY NOT NULL,\n  \"name\" varchar(80) NOT NULL,\n  \"createdAt\" timestamp NOT NULL DEFAULT (now()),\n  \"createdBy\" varchar(20) DEFAULT 'admin',\n  \"updatedAt\" timestamp NOT NULL DEFAULT (now()),\n  \"updatedBy\" varchar(20) DEFAULT 'admin',\n  \"deletedAt\" timestamp,\n  \"deletedBy\" varchar(20)\n);\n\nCREATE TABLE \"characters\" (\n  \"id\" SERIAL PRIMARY KEY NOT NULL,\n  \"characterTypeID\" int NOT NULL,\n  \"name\" varchar(80) NOT NULL,\n  \"power\" int NOT NULL,\n  \"createdAt\" timestamp NOT NULL DEFAULT (now()),\n  \"createdBy\" varchar(20) DEFAULT 'admin',\n  \"updatedAt\" timestamp NOT NULL DEFAULT (now()),\n  \"updatedBy\" varchar(20) DEFAULT 'admin',\n  \"deletedAt\" timestamp,\n  \"deletedBy\" varchar(20)\n);\n\nCREATE TABLE \"charactersType\" (\n  \"id\" SERIAL PRIMARY KEY NOT NULL,\n  \"name\" varchar(80) NOT NULL,\n  \"code\" int NOT NULL,\n  \"createdAt\" timestamp NOT NULL DEFAULT (now()),\n  \"createdBy\" varchar(20) DEFAULT 'admin',\n  \"updatedAt\" timestamp NOT NULL DEFAULT (now()),\n  \"updatedBy\" varchar(20) DEFAULT 'admin',\n  \"deletedAt\" timestamp,\n  \"deletedBy\" varchar(20)\n);\n\nALTER TABLE \"users\" ADD FOREIGN KEY (\"roleId\") REFERENCES \"roles\" (\"id\");\nALTER TABLE \"characters\" ADD FOREIGN KEY (\"characterTypeID\") REFERENCES \"charactersType\" (\"id\");\n"),
 	}
 
 	// define dirs
 	dir1 := &embedded.EmbeddedDir{
 		Filename:   "",
-		DirModTime: time.Unix(1612533536, 0),
+		DirModTime: time.Unix(1614942987, 0),
 		ChildFiles: []*embedded.EmbeddedFile{
 			file2, // "20200205205811_create_table.down.sql"
 			file3, // "20200205205811_create_table.up.sql"
@@ -40,7 +40,7 @@ func init() {
 	// register embeddedBox
 	embedded.RegisterEmbeddedBox(`./migrations`, &embedded.EmbeddedBox{
 		Name: `./migrations`,
-		Time: time.Unix(1612533536, 0),
+		Time: time.Unix(1614942987, 0),
 		Dirs: map[string]*embedded.EmbeddedDir{
 			"": dir1,
 		},

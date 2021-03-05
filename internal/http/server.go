@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/riskiramdan/evos/config"
+	"github.com/riskiramdan/evos/internal/character"
 	"github.com/riskiramdan/evos/internal/data"
 	"github.com/riskiramdan/evos/internal/hosts"
 	"github.com/riskiramdan/evos/internal/http/controller"
@@ -23,12 +24,15 @@ import (
 
 // Server represents the http server that handles the requests
 type Server struct {
-	dataManager    *data.Manager
-	utility        *util.Utility
-	userService    user.ServiceInterface
-	userController *controller.UserController
-	httpManager    *hosts.HTTPManager
-	redisManager   *redis.Client
+	dataManager         *data.Manager
+	utility             *util.Utility
+	config              *config.Config
+	userService         user.ServiceInterface
+	userController      *controller.UserController
+	characterService    character.ServiceInterface
+	characterController *controller.CharacterController
+	httpManager         *hosts.HTTPManager
+	redisManager        *redis.Client
 }
 
 func (hs *Server) authMethod(r chi.Router, method string, path string, handler http.HandlerFunc) {
@@ -75,6 +79,12 @@ func (hs *Server) compileRouter() chi.Router {
 	r.HandleFunc("/login", hs.userController.PostLogin)
 	r.HandleFunc("/register", hs.userController.PostCreateUser)
 
+	r.Route("/character", func(r chi.Router) {
+		r.Get("/list", hs.characterController.GetListCharacter)
+		r.Post("/", hs.characterController.PostCreateCharacter)
+		r.Put("/{characterId}", hs.characterController.PutUpdateCharacter)
+	})
+
 	r.Route("/auth", func(r chi.Router) {
 		r.Use(hs.authorizedOnly(hs.userService))
 
@@ -120,17 +130,22 @@ func (hs *Server) Serve() {
 // NewServer creates a new http server
 func NewServer(
 	userService user.ServiceInterface,
+	characterService character.ServiceInterface,
 	dataManager *data.Manager,
 	config *config.Config,
 	utility *util.Utility,
 	httpManager *hosts.HTTPManager,
 ) *Server {
 	userController := controller.NewUserController(userService, dataManager, utility)
+	characterController := controller.NewCharacterController(characterService, dataManager)
 	return &Server{
-		dataManager:    dataManager,
-		userService:    userService,
-		userController: userController,
-		utility:        utility,
-		httpManager:    httpManager,
+		dataManager:         dataManager,
+		config:              config,
+		userService:         userService,
+		userController:      userController,
+		characterService:    characterService,
+		characterController: characterController,
+		utility:             utility,
+		httpManager:         httpManager,
 	}
 }

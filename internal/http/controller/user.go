@@ -159,7 +159,7 @@ func (a *UserController) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	var sess *user.LoginResponse
 	errTransaction := a.dataManager.RunInTransaction(r.Context(), func(ctx context.Context) error {
-		sess, err = a.userService.Login(r.Context(), params.Phone, params.Password)
+		sess, err = a.userService.Login(ctx, params.Phone, params.Password)
 		if err != nil {
 			return err.Error
 		}
