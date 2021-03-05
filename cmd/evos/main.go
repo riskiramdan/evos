@@ -12,6 +12,7 @@ import (
 	internalhttp "github.com/riskiramdan/evos/internal/http"
 	"github.com/riskiramdan/evos/internal/user"
 	userPg "github.com/riskiramdan/evos/internal/user/postgres"
+	"github.com/riskiramdan/evos/seeder"
 	"github.com/riskiramdan/evos/util"
 
 	"github.com/jmoiron/sqlx"
@@ -58,10 +59,10 @@ func main() {
 	// Migrate the db
 	databases.MigrateUp()
 	// Seeder
-	// err = seeder.SeedUp()
-	// if err != nil {
-	// 	log.Printf("Error: %v\n", err)
-	// }
+	err = seeder.SeedUp()
+	if err != nil {
+		log.Printf("Error: %v\n", err)
+	}
 
 	s := internalhttp.NewServer(
 		internalServices.userService,
