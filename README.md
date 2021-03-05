@@ -5,10 +5,8 @@
 ```
 git clone git@github.com:riskiramdan/evos.git
 cd evos
-
-docker-compose up //Running PostgresSQL & Golang Application
 ```
-## Running Go Application 
+## Running PostgresSQL & Golang Application
 ```
 docker-compose up
 ```
@@ -16,6 +14,10 @@ docker-compose up
 ## Postman Documentation
 https://documenter.getpostman.com/view/9740098/Tz5jeLBV
 https://www.getpostman.com/collections/5980f656d7d002e04fb6
+
+## Database Postgres SQL Structure
+
+![Postgres SQL Structure](/doc/evosdb.png)
 
 ## Domain Driven Design Architectures
 
